@@ -1,13 +1,53 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-  //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-  // to see how IntelliJ IDEA suggests fixing it.
-  IO.println(String.format("Hello and welcome!"));
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-  for (int i = 1; i <= 5; i++) {
-    //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-    // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-    IO.println("i = " + i);
-  }
+public class Main {
+    // свеча - день торгов
+    static class Candle{
+        LocalDate date;
+        double closePrice;
+        public Candle(LocalDate date, double closePrice){
+            this.closePrice = closePrice;
+            this.date = date;
+        }
+
+        // Портфель
+        static class Portfolio{
+            int shares;
+            double cash;
+            double initialCapital;
+            public Portfolio(double initialCapital){
+                this.cash = initialCapital;
+                this.shares = 0;
+                this.initialCapital = initialCapital;
+            }
+            // покупка
+            void buy(int amount, double price){
+                double cost = amount * price;
+                if (cash >= cost){
+                    cash -= cost;
+                    shares += amount;
+                    System.out.printf("[BUY] куплено %d акций по цене %.2f. Остаток денег %.2f%n", amount, price, cash);
+                } else {
+                    System.out.print("[WARN] Недостаточно средств");
+                }
+            }
+            // Продажа
+            void sell(int amount, double price){
+                if (shares >= amount){
+                    double revenue = amount * price;
+                    cash += revenue;
+                    shares -= amount;
+                    System.out.printf("[SELL] Продано %d акций по цене %.2f. Остаток денег: %.2f%n", amount, price, cash);
+                } else {
+                    System.out.println("[WARN] Недостаточно акций для продажи!");
+                }
+            }
+            // Текущая стоимость портфеля
+            public double getTotalValue(double currentPrice) {
+                return cash + (shares * currentPrice);
+            }
+        }
+    }
 }
